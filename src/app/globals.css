@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+@theme {
+  --color-slate-925: #0a0e1a;
+  --color-slate-875: #111827;
+  --color-slate-825: #1a2332;
+  --color-blue-450: #4a9eff;
+  --color-emerald-450: #34d399;
+  --color-cyan-450: #22d3ee;
+  --color-amber-450: #fbbf24;
+  --color-red-450: #f87171;
+  --color-violet-450: #a78bfa;
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+}
+
+body {
+  background: var(--color-slate-925);
+  color: #e2e8f0;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+.code-editor {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  tab-size: 2;
+  resize: none;
+  background: #0d1117;
+  color: #c9d1d9;
+  border: 1px solid #21262d;
+  border-radius: 8px;
+  padding: 16px;
+  width: 100%;
+  min-height: 400px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.code-editor:focus {
+  border-color: #4a9eff;
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+}
+.code-editor::placeholder {
+  color: #484f58;
+}
+
+.result-panel {
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 600px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.metric-card {
+  background: linear-gradient(135deg, rgba(26, 35, 50, 0.9), rgba(17, 24, 39, 0.9));
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.2s;
+}
+.metric-card:hover {
+  border-color: #334155;
+  transform: translateY(-1px);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge-security { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+.badge-quality { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+.badge-debug { background: rgba(74, 158, 255, 0.15); color: #4a9eff; }
+.badge-todo { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
+.badge-style { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74, 158, 255, 0.4); }
+  50% { box-shadow: 0 0 12px 4px rgba(74, 158, 255, 0.15); }
+}
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor-blink::after {
+  content: "▌";
+  color: #4a9eff;
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #21262d;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #30363d;
+}
+
+.analysis-content h2 {
+  color: #e2e8f0;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 20px 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #21262d;
+}
+.analysis-content h2:first-child {
+  margin-top: 0;
+}
+.analysis-content p {
+  color: #8b949e;
+  margin: 6px 0;
+  line-height: 1.7;
+}
+.analysis-content code {
+  background: rgba(74, 158, 255, 0.1);
+  color: #4a9eff;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+}
+.analysis-content pre {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 8px 0;
+  overflow-x: auto;
+}
+.analysis-content pre code {
+  background: transparent;
+  color: #c9d1d9;
+  padding: 0;
+}
+.analysis-content ul, .analysis-content ol {
+  padding-left: 20px;
+  margin: 6px 0;
+}
+.analysis-content li {
+  color: #8b949e;
+  margin: 4px 0;
+  line-height: 1.6;
+}
+.analysis-content strong {
+  color: #e2e8f0;
+}
+.analysis-content em {
+  color: #58a6ff;
+  font-style: italic;
+}
