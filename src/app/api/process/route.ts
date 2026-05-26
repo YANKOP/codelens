@@ -18,16 +18,40 @@ interface ProcessResult {
 }
 
 function detectLanguage(code: string): string {
-  if (/^\s*(import|export)\s+.*from\s+['"]/.test(code) || /:\s*(string|number|boolean|void)\b/.test(code)) return "TypeScript";
-  if (/^\s*def\s+\w+|^\s*class\s+\w+.*:|import\s+\w+/.test(code) && /:\s*$|:\s+\w+/.test(code)) return "Python";
-  if (/^\s*(func|package|import\s+")/m.test(code)) return "Go";
-  if (/^\s*(fn|let\s+mut|impl\s+|use\s+\w+::)/m.test(code)) return "Rust";
+  // TypeScript first — has type annotations or ES module imports
+  if (/:\s*(string|number|boolean|void|any|never|unknown)\b/.test(code)) return "TypeScript";
+  if (/^\s*(import|export)\s+.*from\s+['"]/.test(code) && /interface\s+\w+|type\s+\w+/.test(code)) return "TypeScript";
+
+  // Python — def/class with colon-based blocks
+  if (/^\s*def\s+\w+\s*\(/m.test(code)) return "Python";
+  if (/^\s*class\s+\w+.*:/m.test(code) && !/^\s*class\s+\w+\s*\{/m.test(code)) return "Python";
+
+  // Go — func keyword with word boundary (not "function")
+  if (/^\s*func\s+\w+/m.test(code) || /^\s*package\s+\w+/m.test(code)) return "Go";
+
+  // Rust
+  if (/^\s*(fn\s+\w+|let\s+mut\s+|impl\s+|use\s+\w+::)/m.test(code)) return "Rust";
+
+  // Java
   if (/^\s*(public\s+static\s+void|class\s+\w+\s+extends|import\s+java\.)/m.test(code)) return "Java";
-  if (/^\s*#include\s*<|^\s*int\s+main\s*\(/m.test(code)) return "C/C++";
-  if (/^\s*(const|let|var)\s+\w+\s*=|=>\s*\{|console\.(log|error)/.test(code)) return "JavaScript";
+
+  // C/C++
+  if (/^\s*#include\s*[<"]|^\s*int\s+main\s*\(/m.test(code)) return "C/C++";
+
+  // JavaScript — function keyword, const/let/var, arrow functions, console
+  if (/\bfunction\s+\w+\s*\(/.test(code)) return "JavaScript";
+  if (/^\s*(const|let|var)\s+\w+\s*=/.test(code) || /=>\s*[{(]/.test(code)) return "JavaScript";
+  if (/console\.(log|error|warn|debug)/.test(code)) return "JavaScript";
+
+  // HTML
   if (/<\w+[\s>]|<\/\w+>/.test(code)) return "HTML";
+
+  // JSON
   if (/^\s*\{[\s\S]*"[\w]+":\s*/.test(code)) return "JSON";
+
+  // SQL
   if (/^\s*SELECT\s+|^\s*INSERT\s+|^\s*CREATE\s+TABLE/im.test(code)) return "SQL";
+
   return "Unknown";
 }
 
